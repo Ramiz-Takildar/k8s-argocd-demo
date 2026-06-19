@@ -5,10 +5,14 @@
 
 set -e
 
+# Get the script directory and project root
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
 echo "Applying Kubernetes manifests..."
-kubectl apply -f k8s/base/namespace.yaml
-kubectl apply -f k8s/base/deployment.yaml
-kubectl apply -f k8s/base/service.yaml
+kubectl apply -f "$PROJECT_ROOT/k8s/base/namespace.yaml"
+kubectl apply -f "$PROJECT_ROOT/k8s/base/deployment.yaml"
+kubectl apply -f "$PROJECT_ROOT/k8s/base/service.yaml"
 
 echo "Waiting for deployment to be ready..."
 kubectl wait --for=condition=available --timeout=120s deployment/demo-app -n demo-app
