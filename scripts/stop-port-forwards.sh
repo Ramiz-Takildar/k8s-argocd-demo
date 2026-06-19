@@ -19,13 +19,13 @@ fi
 
 echo ""
 
-# Kill port-forwards on port 8080 (ArgoCD)
-if lsof -ti:8080 > /dev/null 2>&1; then
-    echo "Stopping ArgoCD UI port-forward (port 8080)..."
-    lsof -ti:8080 | xargs kill -9 2>/dev/null
+# Kill port-forwards on port 8081 (ArgoCD)
+if lsof -ti:8081 > /dev/null 2>&1; then
+    echo "Stopping ArgoCD UI port-forward (port 8081)..."
+    lsof -ti:8081 | xargs kill -9 2>/dev/null
     echo "✅ Stopped"
 else
-    echo "ℹ️  No port-forward running on port 8080"
+    echo "ℹ️  No port-forward running on port 8081"
 fi
 
 echo ""

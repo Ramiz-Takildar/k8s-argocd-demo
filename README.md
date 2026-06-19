@@ -137,7 +137,7 @@ argocd app create demo-app \
 
 # This will start:
 # - Portfolio app: http://localhost:3000
-# - ArgoCD UI: https://localhost:8080
+# - ArgoCD UI: https://localhost:8081
 
 # To stop all port-forwards:
 ./scripts/stop-port-forwards.sh
@@ -155,8 +155,8 @@ kubectl port-forward -n demo-app svc/demo-app-service 3000:80
 
 **ArgoCD UI:**
 ```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-# Then visit: https://localhost:8080
+kubectl port-forward svc/argocd-server -n argocd 8081:443
+# Then visit: https://localhost:8081
 # Username: admin
 # Password: (run ./scripts/access-argocd.sh to get password)
 ```

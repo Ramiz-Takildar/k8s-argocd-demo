@@ -28,7 +28,7 @@ fi
 # Kill any existing port-forwards on these ports
 echo "Cleaning up any existing port-forwards..."
 lsof -ti:3000 | xargs kill -9 2>/dev/null || true
-lsof -ti:8080 | xargs kill -9 2>/dev/null || true
+lsof -ti:8081 | xargs kill -9 2>/dev/null || true
 
 echo ""
 echo "Starting port-forwards..."
@@ -47,10 +47,10 @@ sleep 2
 if [ "$SKIP_ARGOCD" != "true" ]; then
     echo ""
     echo "🔄 Starting ArgoCD UI port-forward..."
-    kubectl port-forward -n argocd svc/argocd-server 8080:443 > /tmp/argocd-port-forward.log 2>&1 &
+    kubectl port-forward -n argocd svc/argocd-server 8081:443 > /tmp/argocd-port-forward.log 2>&1 &
     ARGOCD_PID=$!
     echo "   PID: $ARGOCD_PID"
-    echo "   URL: https://localhost:8080"
+    echo "   URL: https://localhost:8081"
     
     # Get ArgoCD password
     sleep 2
@@ -68,7 +68,7 @@ echo ""
 
 if [ "$SKIP_ARGOCD" != "true" ]; then
     echo "🔄 ArgoCD UI:"
-    echo "   https://localhost:8080"
+    echo "   https://localhost:8081"
     echo "   Username: admin"
     echo "   Password: $ARGOCD_PASSWORD"
     echo ""
