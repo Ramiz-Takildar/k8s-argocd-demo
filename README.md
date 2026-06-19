@@ -32,9 +32,6 @@ k8s-argocd-demo/
     ├── build-and-load.sh         # Build and load image to Kind
     ├── install-argocd.sh         # Install ArgoCD
     ├── deploy-app.sh             # Deploy app manually
-    ├── deploy-with-argocd.sh     # Deploy via ArgoCD
-    ├── access-app.sh             # Access portfolio app
-    ├── access-argocd.sh          # Access ArgoCD UI
     ├── start-port-forwards.sh    # Start both port-forwards
     ├── stop-port-forwards.sh     # Stop all port-forwards
     └── cleanup.sh                # Cleanup (preserves cluster)
@@ -109,13 +106,13 @@ This starts both services:
 ./scripts/stop-port-forwards.sh
 ```
 
-**Individual Access Scripts:**
+**Manual Port-Forward (Alternative):**
 ```bash
-# Portfolio only
-./scripts/access-app.sh
+# Portfolio app
+kubectl port-forward -n demo-app svc/demo-app-service 3000:80
 
-# ArgoCD only
-./scripts/access-argocd.sh
+# ArgoCD UI
+kubectl port-forward -n argocd svc/argocd-server 8081:443
 ```
 
 ## 🎯 Alternative Deployment Methods
@@ -127,19 +124,12 @@ This starts both services:
 ./scripts/deploy-app.sh
 ```
 
-### Option B: GitOps Deployment (With ArgoCD)
-
-```bash
-./scripts/build-and-load.sh
-./scripts/install-argocd.sh
-./scripts/deploy-with-argocd.sh
-```
-
-### Option C: ArgoCD UI Deployment
+### Option B: ArgoCD UI Deployment
 
 1. Install ArgoCD: `./scripts/install-argocd.sh`
-2. Access UI: `./scripts/access-argocd.sh`
-3. Click "New App" and configure:
+2. Start port-forward: `./scripts/start-port-forwards.sh`
+3. Access UI: https://localhost:8081
+4. Click "New App" and configure:
    - Application Name: `demo-app`
    - Project: `default`
    - Sync Policy: `Automatic`
@@ -148,7 +138,7 @@ This starts both services:
    - Cluster: `https://kubernetes.default.svc`
    - Namespace: `demo-app`
 
-### Option D: ArgoCD CLI Deployment
+### Option C: ArgoCD CLI Deployment
 
 ```bash
 # Install ArgoCD CLI
