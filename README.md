@@ -147,8 +147,14 @@ kubectl get pods -n demo-app
 # Check service
 kubectl get svc -n demo-app
 
-# Test the application
-curl http://localhost:30080
+# Access the application using port-forward
+./scripts/access-app.sh
+
+# Or manually:
+kubectl port-forward -n demo-app svc/demo-app-service 3000:80
+
+# Then in another terminal, test the application:
+curl http://localhost:3000
 
 # Expected response:
 # {
@@ -159,8 +165,10 @@ curl http://localhost:30080
 # }
 
 # Check health endpoint
-curl http://localhost:30080/health
+curl http://localhost:3000/health
 ```
+
+**Note:** Kind clusters don't expose NodePort services directly to localhost. Use port-forwarding to access the application.
 
 ## 📚 Learning Objectives
 
