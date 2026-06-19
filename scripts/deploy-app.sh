@@ -15,25 +15,18 @@ kubectl apply -f "$PROJECT_ROOT/k8s/base/deployment.yaml"
 kubectl apply -f "$PROJECT_ROOT/k8s/base/service.yaml"
 
 echo "Waiting for deployment to be ready..."
-echo "Checking if deployment exists..."
-for i in {1..30}; do
-    if kubectl get deployment demo-app -n demo-app &> /dev/null; then
-        echo "Deployment found, waiting for pods to be ready..."
-        kubectl wait --for=condition=available --timeout=120s deployment/demo-app -n demo-app && break
-        echo "Still waiting... (attempt $i/30)"
-        sleep 5
-    else
-        echo "Deployment not yet created, waiting... (attempt $i/30)"
-        sleep 2
-    fi
-done
+echo "Giving pods time to start (health checks need ~15-20 seconds)..."
+sleep 15
 
-# Final check
+echo "Checking deployment status..."
 if kubectl get deployment demo-app -n demo-app &> /dev/null; then
+    echo "Deployment found, waiting for all replicas to be ready..."
+    kubectl wait --for=condition=available --timeout=120s deployment/demo-app -n demo-app
+    echo ""
     echo "✅ Deployment is ready!"
     kubectl get pods -n demo-app
 else
-    echo "❌ Error: Deployment was not created successfully"
+    echo "❌ Error: Deployment was not created"
     exit 1
 fi
 
