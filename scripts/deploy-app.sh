@@ -15,7 +15,15 @@ kubectl apply -f "$PROJECT_ROOT/k8s/base/deployment.yaml"
 kubectl apply -f "$PROJECT_ROOT/k8s/base/service.yaml"
 
 echo "Waiting for deployment to be ready..."
-kubectl wait --for=condition=available --timeout=120s deployment/demo-app -n demo-app
+sleep 5
+kubectl wait --for=condition=available --timeout=180s deployment/demo-app -n demo-app 2>/dev/null || {
+    echo "Deployment is taking longer than expected. Checking status..."
+    kubectl get pods -n demo-app
+    echo ""
+    echo "Waiting a bit more..."
+    sleep 10
+    kubectl wait --for=condition=available --timeout=60s deployment/demo-app -n demo-app
+}
 
 echo ""
 echo "Application deployed successfully!"
