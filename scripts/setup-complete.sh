@@ -26,19 +26,23 @@ fi
 echo "✅ Kind cluster 'dev-cluster' found"
 echo ""
 
+# Get the script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
 # Step 1: Build and load image
 echo "Step 1: Building and loading Docker image..."
-./scripts/build-and-load.sh
+bash "$SCRIPT_DIR/build-and-load.sh"
 echo ""
 
 # Step 2: Install ArgoCD
 echo "Step 2: Installing ArgoCD..."
-./scripts/install-argocd.sh
+bash "$SCRIPT_DIR/install-argocd.sh"
 echo ""
 
 # Step 3: Deploy application
 echo "Step 3: Deploying application..."
-./scripts/deploy-app.sh
+bash "$SCRIPT_DIR/deploy-app.sh"
 echo ""
 
 echo "=========================================="
