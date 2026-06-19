@@ -14,21 +14,30 @@ echo "K8s + ArgoCD Demo - Complete Setup"
 echo "=========================================="
 echo ""
 
-# Check if Kind cluster is running
-if ! kind get clusters | grep -q "dev-cluster"; then
-    echo "❌ Error: Kind cluster 'dev-cluster' not found!"
-    echo "Please create the cluster first:"
-    echo "  cd /Users/ramiz/Kind-Cluster"
-    echo "  kind create cluster --name dev-cluster --config kind-config.yaml"
-    exit 1
-fi
-
-echo "✅ Kind cluster 'dev-cluster' found"
-echo ""
-
 # Get the script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
+# Check if Kind cluster is running
+if ! kind get clusters | grep -q "dev-cluster"; then
+    echo "⚠️  Kind cluster 'dev-cluster' not found!"
+    echo "Creating cluster using kind-config.yaml..."
+    echo ""
+    
+    if [ ! -f "$PROJECT_ROOT/kind-config.yaml" ]; then
+        echo "❌ Error: kind-config.yaml not found in project root!"
+        echo "Please ensure kind-config.yaml exists in: $PROJECT_ROOT"
+        exit 1
+    fi
+    
+    kind create cluster --name dev-cluster --config "$PROJECT_ROOT/kind-config.yaml"
+    echo ""
+    echo "✅ Kind cluster 'dev-cluster' created successfully!"
+else
+    echo "✅ Kind cluster 'dev-cluster' found"
+fi
+
+echo ""
 
 # Step 1: Build and load image
 echo "Step 1: Building and loading Docker image..."

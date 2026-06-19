@@ -13,6 +13,7 @@ A complete demonstration project for teaching students about Kubernetes deployme
 
 ```
 k8s-argocd-demo/
+├── kind-config.yaml       # Kind cluster configuration (4 nodes)
 ├── app/
 │   ├── server.js          # Simple Node.js Express application
 │   ├── package.json       # Node.js dependencies
@@ -28,7 +29,7 @@ k8s-argocd-demo/
 │   └── argocd/
 │       └── application.yaml  # ArgoCD application definition
 └── scripts/
-    ├── setup-complete.sh         # Complete automated setup
+    ├── setup-complete.sh         # Complete automated setup (auto-creates cluster)
     ├── build-and-load.sh         # Build and load image to Kind
     ├── install-argocd.sh         # Install ArgoCD
     ├── deploy-app.sh             # Deploy app manually
@@ -42,18 +43,19 @@ k8s-argocd-demo/
 ### One-Command Setup
 
 ```bash
-# 1. Create Kind cluster (from directory containing kind-config.yaml)
-kind create cluster --name dev-cluster --config kind-config.yaml
-
-# 2. Run complete setup (does everything!)
+# Clone the repository
+git clone https://github.com/Ramiz-Takildar/k8s-argocd-demo.git
 cd k8s-argocd-demo
+
+# Run complete setup (does everything!)
 ./scripts/setup-complete.sh
 
-# 3. Start port-forwards for easy access
+# Start port-forwards for easy access
 ./scripts/start-port-forwards.sh
 ```
 
 **That's it!** The setup script automatically:
+- ✅ Creates Kind cluster (if not exists)
 - ✅ Builds and loads Docker image
 - ✅ Installs ArgoCD
 - ✅ Deploys application manually
@@ -66,28 +68,28 @@ cd k8s-argocd-demo
 
 ## 📖 Detailed Setup Guide
 
-### Step 1: Create Kind Cluster
+### Step 1: Clone Repository
 
 ```bash
-# From directory containing kind-config.yaml
-kind create cluster --name dev-cluster --config kind-config.yaml
+git clone https://github.com/Ramiz-Takildar/k8s-argocd-demo.git
+cd k8s-argocd-demo
 ```
 
-### Step 2: Complete Automated Setup
+### Step 2: Run Complete Setup
 
 ```bash
-cd k8s-argocd-demo
 chmod +x scripts/*.sh
 ./scripts/setup-complete.sh
 ```
 
 This single script handles everything:
-1. Builds Docker image (demo-app:v1.0.0)
-2. Loads image into Kind cluster
-3. Installs ArgoCD v2.8.4
-4. Deploys application (4 replicas)
-5. Creates ArgoCD Application
-6. Configures GitOps auto-sync
+1. Creates Kind cluster (if not exists) using included kind-config.yaml
+2. Builds Docker image (demo-app:v1.0.0)
+3. Loads image into Kind cluster
+4. Installs ArgoCD v2.8.4
+5. Deploys application (4 replicas)
+6. Creates ArgoCD Application
+7. Configures GitOps auto-sync
 
 ### Step 3: Access Services
 
