@@ -42,8 +42,7 @@ k8s-argocd-demo/
 ### One-Command Setup
 
 ```bash
-# 1. Create Kind cluster
-cd /Users/ramiz/Kind-Cluster
+# 1. Create Kind cluster (from directory containing kind-config.yaml)
 kind create cluster --name dev-cluster --config kind-config.yaml
 
 # 2. Run complete setup (does everything!)
@@ -70,7 +69,7 @@ cd k8s-argocd-demo
 ### Step 1: Create Kind Cluster
 
 ```bash
-cd /Users/ramiz/Kind-Cluster
+# From directory containing kind-config.yaml
 kind create cluster --name dev-cluster --config kind-config.yaml
 ```
 
