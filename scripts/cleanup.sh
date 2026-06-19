@@ -49,21 +49,6 @@ else
 fi
 
 echo ""
-read -p "Do you want to delete the Kind cluster 'dev-cluster'? (y/n): " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "Step 3: Deleting Kind cluster..."
-    if kind get clusters | grep -q "dev-cluster"; then
-        kind delete cluster --name dev-cluster
-        echo "✅ Kind cluster deleted"
-    else
-        echo "ℹ️  Kind cluster 'dev-cluster' not found"
-    fi
-else
-    echo "ℹ️  Skipping Kind cluster deletion"
-fi
-
-echo ""
 read -p "Do you want to remove Docker images? (y/n): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
