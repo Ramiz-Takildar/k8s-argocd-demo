@@ -77,31 +77,20 @@ This will:
 - Expose ArgoCD UI on port 30443
 - Display the admin password
 
-#### 4.2 Access ArgoCD UI
+#### 4.2 Deploy Application via ArgoCD
 
-**Option 1: Using Port Forward (Recommended)**
+**Automated Deployment (Recommended):**
 ```bash
-# Run this in a separate terminal window
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-
-# Then open in browser (accept self-signed certificate warning)
-open https://localhost:8080
-
-# Or use the helper script
-./scripts/access-argocd.sh
+./scripts/deploy-with-argocd.sh
 ```
 
-**Option 2: Using NodePort (May not work on all systems)**
-```bash
-# Open in browser (accept self-signed certificate warning)
-open https://localhost:30443
-```
+This script will:
+- Verify ArgoCD is installed
+- Create the ArgoCD application
+- Wait for sync to complete
+- Display access information
 
-**Login credentials:**
-- Username: `admin`
-- Password: (displayed by install script or run `./scripts/access-argocd.sh`)
-
-#### 4.3 Deploy Application via ArgoCD
+**Manual Deployment Options:**
 
 **Option 1: Using kubectl**
 ```bash
@@ -109,16 +98,17 @@ kubectl apply -f k8s/argocd/application.yaml
 ```
 
 **Option 2: Using ArgoCD UI**
-1. Click "New App"
-2. Fill in:
+1. Access ArgoCD UI (see section 4.3)
+2. Click "New App"
+3. Fill in:
    - Application Name: `demo-app`
    - Project: `default`
    - Sync Policy: `Automatic`
-   - Repository URL: Your Git repository URL
+   - Repository URL: `https://github.com/Ramiz-Takildar/k8s-argocd-demo.git`
    - Path: `k8s/base`
    - Cluster: `https://kubernetes.default.svc`
    - Namespace: `demo-app`
-3. Click "Create"
+4. Click "Create"
 
 **Option 3: Using ArgoCD CLI**
 ```bash
@@ -127,15 +117,48 @@ brew install argocd  # macOS
 # or download from https://argo-cd.readthedocs.io/en/stable/cli_installation/
 
 # Login to ArgoCD
-argocd login localhost:30443 --insecure
+argocd login localhost:8080 --insecure
 
 # Create application
 argocd app create demo-app \
-  --repo https://github.com/YOUR_USERNAME/k8s-argocd-demo.git \
+  --repo https://github.com/Ramiz-Takildar/k8s-argocd-demo.git \
   --path k8s/base \
   --dest-server https://kubernetes.default.svc \
   --dest-namespace demo-app \
   --sync-policy automated
+```
+
+#### 4.3 Access Both Application and ArgoCD
+
+**Easy Access (Recommended):**
+```bash
+# Start both port-forwards at once
+./scripts/start-port-forwards.sh
+
+# This will start:
+# - Portfolio app: http://localhost:3000
+# - ArgoCD UI: https://localhost:8080
+
+# To stop all port-forwards:
+./scripts/stop-port-forwards.sh
+```
+
+**Manual Access:**
+
+**Portfolio Application:**
+```bash
+./scripts/access-app.sh
+# Or manually:
+kubectl port-forward -n demo-app svc/demo-app-service 3000:80
+# Then visit: http://localhost:3000
+```
+
+**ArgoCD UI:**
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+# Then visit: https://localhost:8080
+# Username: admin
+# Password: (run ./scripts/access-argocd.sh to get password)
 ```
 
 ## 🧪 Testing the Application
