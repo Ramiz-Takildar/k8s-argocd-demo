@@ -79,14 +79,27 @@ This will:
 
 #### 4.2 Access ArgoCD UI
 
+**Option 1: Using Port Forward (Recommended)**
+```bash
+# Run this in a separate terminal window
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+# Then open in browser (accept self-signed certificate warning)
+open https://localhost:8080
+
+# Or use the helper script
+./scripts/access-argocd.sh
+```
+
+**Option 2: Using NodePort (May not work on all systems)**
 ```bash
 # Open in browser (accept self-signed certificate warning)
 open https://localhost:30443
-
-# Login credentials:
-# Username: admin
-# Password: (displayed by install script)
 ```
+
+**Login credentials:**
+- Username: `admin`
+- Password: (displayed by install script or run `./scripts/access-argocd.sh`)
 
 #### 4.3 Deploy Application via ArgoCD
 
